@@ -16,4 +16,5 @@ int main()
         xorArr ^= arr[i];
     }
     cout << xorArr << endl;
+    delete[] arr;
 }
