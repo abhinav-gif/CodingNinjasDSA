@@ -12,19 +12,41 @@ int main()
     }
     int k;
     cin >> k;
-    int *rotate = new int[k];
-    for (int i = 0; i < k; i++)
+    // int *rotate = new int[k];
+    // for (int i = 0; i < k; i++)
+    // {
+    //     rotate[i] = arr[i];
+    // }
+    // for (int i = k; i < n; i++)
+    // {
+    //     arr[i - k] = arr[i];
+    // }
+    // for (int i = n - k, j = 0; j < k; i++, j++)
+    // {
+    //     arr[i] = rotate[j];
+    // }
+    int i = 0, j = n - 1;
+    while (i < j)
     {
-        rotate[i] = arr[i];
+        swap(arr[i], arr[j]);
+        i++;
+        j--;
     }
-    for (int i = k; i < n; i++)
+    i = 0, j = n - k - 1;
+    while (i < j)
     {
-        arr[i - k] = arr[i];
+        swap(arr[i], arr[j]);
+        i++;
+        j--;
     }
-    for (int i = n - k, j = 0; j < k; i++, j++)
+    i = n - k, j = n - 1;
+    while (i < j)
     {
-        arr[i] = rotate[j];
+        swap(arr[i], arr[j]);
+        i++;
+        j--;
     }
+
     //print rotated array
     for (int i = 0; i < n; i++)
     {
