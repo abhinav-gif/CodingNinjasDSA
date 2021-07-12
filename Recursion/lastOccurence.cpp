@@ -1,9 +1,9 @@
 #include <iostream>
 using namespace std;
 
-int fio(int *arr, int n, int x, int idx)
+int lio(int *arr, int n, int x, int idx)
 {
-    if (idx == n)
+    if (idx == -1)
     {
         return -1;
     }
@@ -13,7 +13,7 @@ int fio(int *arr, int n, int x, int idx)
     }
     else
     {
-        return fio(arr, n, x, idx + 1);
+        return lio(arr, n, x, idx - 1);
     }
 }
 
@@ -28,5 +28,5 @@ int main()
     }
     int x;
     cin >> x;
-    cout << fio(arr, n, x, 0) << endl;
+    cout << lio(arr, n, x, n - 1) << endl;
 }
