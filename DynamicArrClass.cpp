@@ -3,11 +3,28 @@ using namespace std;
 
 class DynamicArr
 {
-    int *arr = new int[1];
-    int size = 0;
-    int capacity = 1;
+    int *arr;
+    int size;
+    int capacity;
 
 public:
+    DynamicArr()
+    {
+        arr = new int[1];
+        size = 0;
+        capacity = 1;
+    }
+    DynamicArr(DynamicArr const &d)
+    {
+        this->size = d.size;
+        this->capacity = d.capacity;
+        int *newArr = new int[d.capacity];
+        for (int i = 0; i < d.size; i++)
+        {
+            newArr[i] = d.arr[i];
+        }
+        this->arr=newArr;
+    }
     void push_back(int n)
     {
         if (size == capacity)
@@ -37,7 +54,7 @@ public:
         }
         size--;
     }
-    void print()
+    void print() const
     {
         for (int i = 0; i < size; i++)
         {
@@ -45,25 +62,77 @@ public:
         }
         cout << endl;
     }
-    int length()
+    int length() const
     {
         return size;
     }
-    int cap()
+    int cap() const
     {
         return capacity;
+    }
+    int get(int i)
+    {
+        if (i >= size)
+        {
+            return -1;
+        }
+        return arr[i];
+    }
+    void insert(int index, int element)
+    {
+        if (index > size || index < 0)
+        {
+            return;
+        }
+        if (size == capacity)
+        {
+            int *newArr = new int[2 * capacity];
+            capacity = 2 * capacity;
+            for (int i = 0; i < size; i++)
+            {
+                newArr[i] = arr[i];
+            }
+            delete[] arr;
+            arr = newArr;
+            for (int i = size; i > index; i--)
+            {
+                arr[i] = arr[i - 1];
+            }
+            arr[index] = element;
+            size++;
+        }
+        else
+        {
+            for (int i = size; i > index; i--)
+            {
+                arr[i] = arr[i - 1];
+            }
+            arr[index] = element;
+            size++;
+        }
+    }
+    void operator=(DynamicArr const &d)
+    {
+        this->size = d.size;
+        this->capacity = d.capacity;
+        int *newArr = new int[d.capacity];
+        for (int i = 0; i < d.size; i++)
+        {
+            newArr[i] = d.arr[i];
+        }
+        this->arr=newArr;
     }
 };
 
 int main()
 {
     DynamicArr abc;
-    abc.push_back(1);
-    abc.push_back(2);
-    abc.push_back(3);
-    abc.push_back(4);
-    cout << abc.length() << " " << abc.cap() << endl;
-    abc.pop_back();
-     cout << abc.length() << " " << abc.cap() << endl;
+    abc.push_back(10);
+    abc.push_back(20);
+    abc.push_back(30);
+    DynamicArr d1(abc);
+    abc.push_back(40);
+    d1.print();
     abc.print();
+
 }
