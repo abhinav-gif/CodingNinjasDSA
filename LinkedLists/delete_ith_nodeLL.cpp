@@ -28,6 +28,9 @@ void deleteNode(Node *&head, int i)
         if (i == curr + 1)
         {
             Node *a = temp->next;
+            if(temp->next==NULL){
+                return;
+            }
             temp->next = temp->next->next;
             delete a;
             return;
