@@ -50,33 +50,13 @@ Node *merge(Node *h1, Node *h2)
             h2 = h2->next;
         }
     }
-    while (h1 != NULL)
+    if (h1 != NULL)
     {
-        if (head == NULL)
-        {
-            head = h1;
-            tail = h1;
-        }
-        else
-        {
-            tail->next = h1;
-            tail = tail->next;
-        }
-        h1 = h1->next;
+        tail->next=h1;
     }
-    while (h2 != NULL)
+    if (h2 != NULL)
     {
-        if (head == NULL)
-        {
-            head = h2;
-            tail = h2;
-        }
-        else
-        {
-            tail->next = h2;
-            tail = tail->next;
-        }
-        h2 = h2->next;
+        tail->next=h2;
     }
     return head;
 }
