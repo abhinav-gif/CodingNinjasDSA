@@ -41,6 +41,10 @@ int mid(Node *head)
 {
     Node *slow = head;
     Node *fast = head;
+    if (fast != NULL)
+    {
+        fast = fast->next;
+    }
     while (fast != NULL && fast->next != NULL)
     {
         slow = slow->next;
