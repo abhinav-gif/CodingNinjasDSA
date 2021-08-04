@@ -1,185 +1,188 @@
-#include <iostream>
-#include <climits>
-#include <cmath>
+#include<iostream>
+
 using namespace std;
 
-class Polynomial
-{
-    int *degreeCoeff;
-    int capacity;
-
-public:
-    Polynomial()
-    {
-        capacity = 1;
-        for (int i = 0; i < capacity; i++)
-        {
-            degreeCoeff[i] = 0;
+class Polynomial {
+    public:
+    int * degCoeff; // Name of your array (Don't change this)
+	int capacity;
+    
+    
+    Polynomial(){
+        this->degCoeff = new int[10];
+        this->capacity=10;
+         for (int i = 0; i < 10; i++) {
+            degCoeff[i] = 0;
         }
     }
-    Polynomial(Polynomial const &p)
-    {
+    
+    Polynomial(const Polynomial& p){
+        
         this->capacity = p.capacity;
-        int *newP = new int[p.capacity];
-        for (int i = 0; i < p.capacity; i++)
-        {
-            newP[i] = degreeCoeff[i];
-        }
-        this->degreeCoeff = newP;
+        this->degCoeff = new int[p.capacity];
+        for(int i=0;i<p.capacity;i++)
+        	this->degCoeff[i] = p.degCoeff[i];
     }
-    void operator=(Polynomial const &p)
-    {
-        this->capacity = p.capacity;
-        int *newP = new int[p.capacity];
-        for (int i = 0; i < p.capacity; i++)
-        {
-            newP[i] = degreeCoeff[i];
-        }
-        this->degreeCoeff = newP;
+    
+    void setCoefficient(int deg, int coeff){
+        if(this->capacity<=deg){
+            int *newDegCoeff = new int[deg+10];
+            for (int i = 0; i < deg+10; i++) {
+                newDegCoeff[i] = 0;
+            }
+            for(int i=0;i<this->capacity;i++){
+                newDegCoeff[i] = this->degCoeff[i];
+            }
+            this->capacity = deg+10;
+            delete [] this->degCoeff;
+            this->degCoeff = newDegCoeff;            
+        }       
+    
+        this->degCoeff[deg] = coeff;
     }
-
-    void setCoeff(int *pDegree, int *pCoeff, int pSize)
-    {
-        int max = INT_MIN;
-        for (int i = 0; i < pSize; i++)
-        {
-            if (max < pDegree[i])
-            {
-                max = pDegree[i];
+    
+    Polynomial operator + (Polynomial p2){
+        Polynomial result;
+        
+        int i=0,j=0;
+        while(i<this->capacity || i<p2.capacity){
+            int deg = i;
+            int coeff1=0,coeff2=0;
+            if(i<this->capacity)
+                coeff1=this -> degCoeff[i];
+            if(i<p2.capacity)
+                coeff2= p2.degCoeff[i];
+            int coeff =  coeff1 + coeff2;
+            result.setCoefficient(deg, coeff);
+            i++;
+            
+        }
+        
+        return result;
+    }
+    
+    Polynomial operator - (Polynomial p2){
+         Polynomial result;
+        int i=0,j=0;
+        while(i<this->capacity || j<p2.capacity){
+            int deg = i;
+            int coeff1=0,coeff2=0;
+            if(i<this->capacity)
+                coeff1=this -> degCoeff[i];
+            if(j<p2.capacity)
+                coeff2= p2.degCoeff[j];
+            int coeff =  coeff1 - coeff2;
+            result.setCoefficient(deg, coeff);
+            i++;
+            j++;
+        }
+        return result;
+    }
+    int getCoeff(int degree) {
+        if (degree >= this->capacity) {
+            return 0;
+        }
+        return this->degCoeff[degree];
+    }
+    Polynomial operator * (Polynomial p2){
+        Polynomial result;
+        
+        for(int i=0;i<this->capacity;i++){
+            for(int j=0;j<p2.capacity;j++){
+                int deg = i+j;
+                int coeff = result.getCoeff(deg) + this->degCoeff[i] * p2.degCoeff[j];
+                result.setCoefficient(deg,coeff);
             }
         }
+        return result;
+    }
+    
+    Polynomial& operator = (const Polynomial& p2){
+        
+        this->capacity = p2.capacity;
+		this->degCoeff = new int[p2.capacity];
+        for(int i=0;i<p2.capacity;i++)
+        	this->degCoeff[i] = p2.degCoeff[i];
+        return *this;
+    }
+    
+    void print(){
+        if(this->capacity==0)
+            return;
+        for(int i=0;i<this->capacity;i++){
+            if(this->degCoeff[i]!=0)
+                cout<<this->degCoeff[i]<<"x"<<i<<" ";
+        }
+    }
+    
 
-        while (max >= capacity)
-        {
-            capacity = 2 * capacity;
-        }
-        degreeCoeff = new int[capacity];
-
-        for (int i = 0; i < capacity; i++)
-        {
-            degreeCoeff[i] = 0;
-        }
-
-        for (int i = 0; i < pSize; i++)
-        {
-            degreeCoeff[pDegree[i]] = pCoeff[i];
-        }
-    }
-    Polynomial operator+(Polynomial const &p)
-    {
-        int max1 = max(p.capacity, this->capacity);
-        int *newDegCoeff = new int[max1];
-        for (int i = 0; i < capacity; i++)
-        {
-            newDegCoeff[i] = 0;
-        }
-        for (int i = 0; i < max1; i++)
-        {
-            newDegCoeff[i] = this->degreeCoeff[i] + p.degreeCoeff[i];
-        }
-        Polynomial newP;
-        newP.degreeCoeff = newDegCoeff;
-        return newP;
-    }
-    Polynomial operator-(Polynomial const &p)
-    {
-        int max1 = max(p.capacity, this->capacity);
-        int *newDegCoeff = new int[max1];
-        for (int i = 0; i < capacity; i++)
-        {
-            newDegCoeff[i] = 0;
-        }
-        for (int i = 0; i < max1; i++)
-        {
-            newDegCoeff[i] = this->degreeCoeff[i] - p.degreeCoeff[i];
-        }
-        Polynomial newP;
-        newP.degreeCoeff = newDegCoeff;
-        return newP;
-    }
-    void print()
-    {
-        for (int i = 0; i < capacity; i++)
-        {
-            if (degreeCoeff[i] != 0)
-            {
-                cout << degreeCoeff[i] << "x" << i << " ";
-            }
-        }
-        cout << endl;
-    }
-    int *getDegCoeff()
-    {
-        return degreeCoeff;
-    }
 };
 
-int main()
-{
-    int n;
-    cin >> n;
-    int *p1Degree = new int[n];
-    for (int i = 0; i < n; i++)
-    {
-        cin >> p1Degree[i];
+int main() {
+    int count1, count2, choice;
+    cin >> count1;
+
+    int * degree1 = new int[count1];
+    int * coeff1 = new int[count1];
+
+    for (int i = 0; i < count1; i++) {
+        cin >> degree1[i];
     }
-    int *p1Coef = new int[n];
-    for (int i = 0; i < n; i++)
-    {
-        cin >> p1Coef[i];
+
+    for (int i = 0; i < count1; i++) {
+        cin >> coeff1[i];
     }
-    int m;
-    cin >> m;
-    int *p2Degree = new int[m];
-    for (int i = 0; i < n; i++)
-    {
-        cin >> p2Degree[i];
-    }
-    int *p2Coef = new int[m];
-    for (int i = 0; i < m; i++)
-    {
-        cin >> p2Coef[i];
-    }
+
     Polynomial first;
-    first.setCoeff(p1Degree, p1Coef, n);
+    for (int i = 0; i < count1; i++) {
+        first.setCoefficient(degree1[i], coeff1[i]);
+    }
+
+    cin >> count2;
+
+    int * degree2 = new int[count2];
+    int * coeff2 = new int[count2];
+
+    for (int i = 0; i < count2; i++) {
+        cin >> degree2[i];
+    }
+
+    for (int i = 0; i < count2; i++) {
+        cin >> coeff2[i];
+    }
+
     Polynomial second;
-    second.setCoeff(p2Degree, p2Coef, m);
-    
-    int choice;
+    for (int i = 0; i < count2; i++) {
+        second.setCoefficient(degree2[i], coeff2[i]);
+    }
+
     cin >> choice;
 
-    switch (choice)
-    {
+    Polynomial result;
+    switch (choice) {
         // Add
     case 1:
-    {
-        Polynomial result1 = first + second;
-        result1.print();
+        result = first + second;
+        result.print();
         break;
-    }
         // Subtract
     case 2:
-    {
-        Polynomial result2 = first - second;
-        result2.print();
+        result = first - second;
+        result.print();
         break;
-    }
         // Multiply
-    // case 3:
-    // {
-    //     Polynomial result3 = first * second;
-    //     result3.print();
-    //     break;
-    // }
+    case 3:
+        result = first * second;
+        result.print();
+        break;
+
     case 4: // Copy constructor
     {
         Polynomial third(first);
-        if (third.getDegCoeff() == first.getDegCoeff())
-        {
+
+        if (third.degCoeff == first.degCoeff) {
             cout << "false" << endl;
-        }
-        else
-        {
+        } else {
             cout << "true" << endl;
         }
         break;
@@ -188,15 +191,16 @@ int main()
     case 5: // Copy assignment operator
     {
         Polynomial fourth(first);
-        if (fourth.getDegCoeff() == first.getDegCoeff())
-        {
+
+        if (fourth.degCoeff == first.degCoeff) {
             cout << "false" << endl;
-        }
-        else
-        {
+        } else {
             cout << "true" << endl;
         }
         break;
     }
+
     }
+
+    return 0;
 }
