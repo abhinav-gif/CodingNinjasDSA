@@ -30,14 +30,10 @@ Node *reverse(Node *head)
         return head;
     }
     Node *sh = reverse(head->next);
-    Node *temp = head;
-    head = sh;
-    temp->next = NULL;
-    while (sh->next != NULL)
-    {
-        sh = sh->next;
-    }
-    sh->next = temp;
+    Node *temp = head->next;
+    temp->next=head;
+    head->next=NULL;
+    head = sh;    
     return head;
 }
 
