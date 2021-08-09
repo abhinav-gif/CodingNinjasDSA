@@ -23,7 +23,7 @@ public:
         {
             newArr[i] = d.arr[i];
         }
-        this->arr=newArr;
+        this->arr = newArr;
     }
     void push_back(int n)
     {
@@ -120,7 +120,7 @@ public:
         {
             newArr[i] = d.arr[i];
         }
-        this->arr=newArr;
+        this->arr = newArr;
     }
 };
 
@@ -134,5 +134,4 @@ int main()
     abc.push_back(40);
     d1.print();
     abc.print();
-
 }
