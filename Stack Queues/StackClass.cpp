@@ -15,10 +15,15 @@ public:
 template <typename T>
 class Stack
 {
-    int size = 0;
+    int size;
     Node<T> *head;
 
 public:
+    Stack()
+    {
+        size = 0;
+        head = NULL;
+    }
     void push(T data)
     {
         Node<T> *temp = new Node<T>(data);
@@ -67,11 +72,8 @@ public:
 
 int main()
 {
-    Stack<int> s;
-    s.push(10);
-    s.push(20);
+    Stack<char> s;
     s.pop();
-    s.push(30);
     cout << s.top() << endl;
     cout << s.Getsize() << endl;
     cout << s.isEmpty() << endl;
